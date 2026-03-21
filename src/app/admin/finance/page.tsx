@@ -50,20 +50,47 @@ export default function FinanceDashboard() {
     fetchAllData();
   }, []);
 
-  const handleStatusUpdate = async (regId: string, newStatus: RegistrationStatus) => {
+const handleStatusUpdate = async (regId: string, newStatus: RegistrationStatus) => {
     if (newStatus === 'REJECTED') {
-      const confirm = window.confirm("Are you sure you want to REJECT this payment? The student will be notified.");
+      const confirm = window.confirm("Are you sure you want to REJECT this payment? The student will be notified via email.");
+      if (!confirm) return;
+    } else if (newStatus === 'ACCEPTED') {
+      const confirm = window.confirm("Approve this payment? An official receipt will be emailed to the student.");
       if (!confirm) return;
     }
 
     setProcessingId(regId);
+    
+    // 1. Update Firestore Status
     const res = await updateRegistrationStatus(regId, newStatus);
     
     if (res.success) {
-      // Update UI instantly
+      // 2. Update UI instantly
       setRegistrations(prev => prev.map(reg => reg.id === regId ? { ...reg, status: newStatus } : reg));
+
+      // 3. 📧 Trigger "Accepted" or "Rejected" Email
+      const regToEmail = registrations.find(r => r.id === regId);
+      if (regToEmail) {
+        const userToEmail = users[regToEmail.userId];
+        const eventToEmail = events[regToEmail.eventId];
+        
+        if (userToEmail && eventToEmail) {
+          fetch('/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              type: newStatus, // 'ACCEPTED' or 'REJECTED'
+              email: userToEmail.email,
+              name: userToEmail.fullName,
+              eventName: eventToEmail.title,
+              utr: regToEmail.utrNumber,
+              amount: eventToEmail.registrationFee
+            })
+          }).catch(err => console.error("Failed to trigger email API", err));
+        }
+      }
     } else {
-      alert("Failed to update status.");
+      alert("Failed to update status in database.");
     }
     setProcessingId(null);
   };

@@ -117,11 +117,12 @@ export default function UsersRolesPage() {
                   <p className="font-bold text-gray-900">{user.fullName}</p>
                   <p className="text-sm text-gray-500">{user.email}</p>
                 </td>
-                <td className="p-4">
+ <td className="p-4">
                   <span className={`px-3 py-1 rounded-full text-xs font-bold ${
                     user.role === 'ADMIN' ? 'bg-purple-100 text-purple-700' :
                     user.role === 'COORDINATOR' ? 'bg-blue-100 text-blue-700' :
                     user.role === 'TREASURER' ? 'bg-green-100 text-green-700' :
+                    user.role === 'SOCIAL_MEDIA' ? 'bg-pink-100 text-pink-700' : // <-- NEW COLOR
                     'bg-gray-100 text-gray-700'
                   }`}>
                     {user.role}
@@ -172,12 +173,13 @@ export default function UsersRolesPage() {
                 </div>
               )}
 
-              <div>
+<div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Account Role</label>
                 <select value={role} onChange={(e) => setRole(e.target.value as UserRole)} className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500 outline-none bg-gray-50 font-medium">
                   <option value="USER">Standard User</option>
                   <option value="COORDINATOR">Head Coordinator</option>
                   <option value="TREASURER">Treasurer</option>
+                  <option value="SOCIAL_MEDIA">Social Media Head</option> {/* NEW OPTION */}
                   <option value="ADMIN">System Admin</option>
                 </select>
               </div>

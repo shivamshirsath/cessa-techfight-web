@@ -18,7 +18,7 @@ export const createNewEvent = async (
   title: string, description: string, fee: number, posterFile: File,
   eventType: 'SINGLE' | 'TEAM', teamSize: number, 
   coordinatorName: string, coordinatorContact: string,
-  staffCoordinatorName: string, staffCoordinatorContact: string, // <--- NEW FIELDS
+  staffCoordinatorName: string, staffCoordinatorContact: string,
   paymentQrFile: File, upiId: string, bankDetails: string
 ) => {
   try {
@@ -32,7 +32,7 @@ export const createNewEvent = async (
       title, description, registrationFee: fee, posterUrl,
       eventType, teamSize: eventType === 'SINGLE' ? 1 : teamSize,
       coordinatorName, coordinatorContact, 
-      staffCoordinatorName, staffCoordinatorContact, // <--- SAVING NEW FIELDS
+      staffCoordinatorName, staffCoordinatorContact,
       paymentQrUrl, upiId, bankDetails,
       createdBy: currentUser.uid, isActive: true, createdAt: Date.now(),
     };
@@ -62,7 +62,7 @@ export const updateEvent = async (
   newPosterFile: File | null, existingPosterUrl: string,
   eventType: 'SINGLE' | 'TEAM', teamSize: number, 
   coordinatorName: string, coordinatorContact: string,
-  staffCoordinatorName: string, staffCoordinatorContact: string, // <--- NEW FIELDS
+  staffCoordinatorName: string, staffCoordinatorContact: string,
   newQrFile: File | null, existingQrUrl: string, upiId: string, bankDetails: string
 ) => {
   try {
@@ -77,7 +77,7 @@ export const updateEvent = async (
       title, description, registrationFee: fee, posterUrl,
       eventType, teamSize: eventType === 'SINGLE' ? 1 : teamSize,
       coordinatorName, coordinatorContact, 
-      staffCoordinatorName, staffCoordinatorContact, // <--- SAVING NEW FIELDS
+      staffCoordinatorName, staffCoordinatorContact,
       paymentQrUrl, upiId, bankDetails
     });
 
@@ -103,13 +103,15 @@ export const submitRegistration = async (
   eventId: string,
   userId: string,
   utrNumber: string,
-  teamDetails: { name: string; phone: string }[] | null
+  teamDetails: { name: string; phone: string }[] | null,
+  collegeName: string // <--- NEW PARAMETER ADDED
 ) => {
   try {
     const regData = {
       eventId,
       userId,
       utrNumber,
+      college: collegeName, // <--- SAVES COLLEGE TO DATABASE
       status: 'UNDER_REVIEW', // Goes straight to the Treasurer!
       submittedAt: Date.now(),
       ...(teamDetails && { teamDetails }) // Saves team members if it's a team event
