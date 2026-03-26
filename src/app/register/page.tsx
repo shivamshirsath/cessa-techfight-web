@@ -65,13 +65,13 @@ export default function RegisterPage() {
             
             {/* Full Name Input */}
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Full Name</label>
+              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Full Name (As Per Certificate)</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                   <User className="h-5 w-5 text-gray-400" />
                 </div>
                 <input 
-                  type="text" required placeholder="John Doe" 
+                  type="text" required placeholder="Full Name As You Want on Certificate" 
                   className="w-full pl-11 pr-4 py-3.5 rounded-xl border-2 border-gray-100 focus:border-[#9E1B42] focus:ring-4 focus:ring-[#9E1B42]/10 outline-none transition bg-gray-50/50 text-gray-900 font-medium" 
                   value={fullName} onChange={(e) => setFullName(e.target.value)} 
                 />
